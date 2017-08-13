@@ -62,12 +62,12 @@ client.on('message', (message) => {
 })
 
 client.on('message', (message) => {
-  if (message.content.startsWith(`<@${client.user.id}>` + ` help`)) {
+  if (message.content.startsWith(`<@!${client.user.id}>` + ` help`)) {
     message.reply({
-      embed: new Discord.MessageEmbed()
+      embed: new Discord.RichEmbed()
         .setTitle(`KarmaBot-Mod Help & Information`)
         .setURL(`https://github.com/shikhir-arora/karma-simple`)
-        .setThumbnail(client.user.displayAvatarURL())
+        .setThumbnail(message.guild.iconURL)
         .setColor(Math.floor(Math.random() * (0xFFFFFF + 1)))
         .setDescription(`**Help and Information (basic usage/support) for KarmaBot-Mod**`)
         .addField(`**❯❯ Add Karma (++):**`, `To **add or increase** karma, type *any* keyword (can be a username, emoji, or any string of text) followed by two plus symbols **++** For example, typing **keyword++** will increase the karma of keyword by one. **Requires rep role**`, true)
@@ -105,7 +105,7 @@ client.on('message', async (message) => {
         await gist(clean(evaled))
           .then(res => {
             message.channel.send({
-              embed: new Discord.MessageEmbed()
+              embed: new Discord.RichEmbed()
                 .setTitle('Eval output exceeds 2000 characters. View Gist.')
                 .setURL(`${res.html_url}`)
                 .setColor(Math.floor(Math.random() * (0xFFFFFF + 1)))
@@ -139,7 +139,7 @@ client.on('message', async (message) => {
         await gist(`${stdout}\n\n${stderr}`)
           .then(res => {
             message.channel.send({
-              embed: new Discord.MessageEmbed()
+              embed: new Discord.RichEmbed()
                 .setTitle('Console output exceeds 2000 characters. View Gist.')
                 .setURL(`${res.html_url}`)
                 .setColor(Math.floor(Math.random() * (0xFFFFFF + 1)))
@@ -158,7 +158,7 @@ client.on('message', async (message) => {
 
 client.on('ready', () => {
   console.log(`[READY] Connected as ${client.user.username}#${client.user.discriminator} ${client.user.id}`)
-  client.user.setGame(`@KarmaBot help`)
+  client.user.setGame(`${client.user.username} help`)
 })
 
 client.on('guildCreate', (guild) => {
