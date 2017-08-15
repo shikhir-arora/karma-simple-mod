@@ -30,6 +30,7 @@ client.on('message', (message) => {
       if (!message.guild.roles.find('name', 'rep')) {
         return message.channel.send(`**Please create the rep role and assign it to use Karma!** This will only show if no rep role exists in the guild.`)
       }
+      let type
       if (message.cleanContent.endsWith('--') && message.member.roles.has(message.guild.roles.find('name', 'rep').id)) {
         type = 'minus'
       } else if (message.cleanContent.endsWith('++') && message.member.roles.has(message.guild.roles.find('name', 'rep').id)) {
