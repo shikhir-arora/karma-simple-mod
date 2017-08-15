@@ -26,8 +26,7 @@ client.on('message', (message) => {
           timestamp: new Date()
         }
       })
-    } else {
-      let type
+    } else if ((message.cleanContent.endsWith('--')) || message.cleanContent.endsWith('++')) {
       if (!message.guild.roles.find('name', 'rep')) {
         return message.channel.send(`**Please create the rep role and assign it to use Karma!** This will only show if no rep role exists in the guild.`)
       }
