@@ -8,24 +8,28 @@ const rl = new Ratelimiter()
 
 const client = new Discord.Client()
 
-client.on('message', (message) => {
+client.on('message', async (message) => {
   if (message.author.bot) return
   const check = rl.check(message)
   if (check === true) {
     if (message.cleanContent.startsWith(config.prefix)) {
       const keyword = message.cleanContent.replace(config.prefix, '').trim() // Inputs ARE case sensitive; i.e. "test" and "Test" are different entries. To change to case-insensitive, replace .trim() to .trim().toLowerCase()
       const count = localStorage.getItem(keyword) || 0
-      message.reply({
-        embed: {
-          color: Math.floor(Math.random() * (0xFFFFFF + 1)),
-          author: {
-            name: client.user.username,
-            icon_url: client.user.displayAvatarURL
-          },
-          description: `${keyword} has **${count}** Karma!`,
-          timestamp: new Date()
-        }
-      })
+      try {
+        await message.reply({
+          embed: {
+            color: Math.floor(Math.random() * (0xFFFFFF + 1)),
+            author: {
+              name: client.user.username,
+              icon_url: client.user.displayAvatarURL
+            },
+            description: `${keyword} has **${count}** Karma!`,
+            timestamp: new Date()
+          }
+        })
+      } catch (e) {
+        console.log(e)
+      }
     } else if ((message.cleanContent.endsWith('--')) || message.cleanContent.endsWith('++')) {
       if (!message.guild.roles.find('name', 'rep')) {
         return message.channel.send(`**Please create the rep role and assign it to use Karma!** This will only show if no rep role exists in the guild.`)
@@ -44,27 +48,28 @@ client.on('message', (message) => {
       else if (type === 'plus') count++
       console.log(`[KARMA] ${keyword} ${type}`)
       localStorage.setItem(keyword, count)
-      message.channel.send({
-        embed: {
-          color: Math.floor(Math.random() * (0xFFFFFF + 1)),
-          author: {
-            name: client.user.username,
-            icon_url: client.user.displayAvatarURL
-          },
-          description: `[KARMA] **${keyword}** has **${count}** Karma. To lookup later use  **${config.prefix}**  and type **${config.prefix} ${keyword}**`,
-          timestamp: new Date()
-        }
-      })
+      try {
+        await message.channel.send({
+          embed: {
+            color: Math.floor(Math.random() * (0xFFFFFF + 1)),
+            author: {
+              name: client.user.username,
+              icon_url: client.user.displayAvatarURL
+            },
+            description: `[KARMA] **${keyword}** has **${count}** Karma. To lookup later use  **${config.prefix}**  and type **${config.prefix} ${keyword}**`,
+            timestamp: new Date()
+          }
+        })
+      } catch (e) {
+        console.log(e)
+      }
     }
-  } else {
-    if (config.explain) message.reply(`Sorry, you have to wait ${check} seconds!`)
   }
-})
 
-client.on('message', (message) => {
-  if (message.content.startsWith(`<@!${client.user.id}>` + ` help`)) {
-    message.reply({
-      embed: new Discord.MessageEmbed()
+  if (message.content.startsWith(`<@${client.user.id}>` + ` help`)) {
+    if (message.author.bot) return
+    try {
+      const embed = new Discord.RichEmbed()
         .setTitle(`KarmaBot-Mod Help & Information`)
         .setURL(`https://github.com/shikhir-arora/karma-simple`)
         .setThumbnail(message.guild.iconURL)
@@ -77,16 +82,15 @@ client.on('message', (message) => {
         .addBlankField()
         .addField(`**❯❯ Support:**`, `**For support, visit:** [our Discord server](https://discord.io/joinec) or [GitHub](https://github.com/shikhir-arora/karma-simple/issues)`, true)
         .setTimestamp()
-
-    })
+      await message.reply({embed})
+    } catch (e) {
+      console.error(e)
+    }
   }
-})
 
-const clean = (text) => {
-  if (typeof (text) === 'string') { return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)) } else { return text }
-}
-
-client.on('message', async (message) => {
+  const clean = (text) => {
+    if (typeof (text) === 'string') { return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)) } else { return text }
+  }
   const args = message.content.split(' ').slice(1)
 
   if (message.content.startsWith(config.adminprefix + 'eval')) {
@@ -104,14 +108,13 @@ client.on('message', async (message) => {
       if (clean(evaled).length > 2000) {
         await gist(clean(evaled))
           .then(res => {
-            message.channel.send({
-              embed: new Discord.MessageEmbed()
-                .setTitle('Eval output exceeds 2000 characters. View Gist.')
-                .setURL(`${res.html_url}`)
-                .setColor(Math.floor(Math.random() * (0xFFFFFF + 1)))
-                .setDescription(`Eval output exceeds 2000 characters. View Gist [here](${res.html_url}).`)
-                .setTimestamp()
-            }).catch((e) => message.channel.send(e.message))
+            const embed = new Discord.MessageEmbed()
+              .setTitle(`Eval output exceeds 2000 characters. View Gist.`)
+              .setURL(`${res.html_url}`)
+              .setColor(Math.floor(Math.random() * (0xFFFFFF + 1)))
+              .setDescription(`Eval output exceeds 2000 characters. View Gist [here](${res.html_url}).`)
+              .setTimestamp()
+            message.channel.send({embed}).catch((e) => message.channel.send(e.message))
           })
       } else {
         message.channel.send(clean(evaled), {
@@ -127,10 +130,6 @@ client.on('message', async (message) => {
       message.channel.send(`\`ERROR\` \`\`\`js\n${clean(err)}\n\`\`\``)
     }
   }
-})
-
-client.on('message', async (message) => {
-  const args = message.content.split(' ').slice(1)
 
   if (message.content.startsWith(config.adminprefix + 'exec')) {
     if (message.author.id !== config.ownerID) return
@@ -138,19 +137,18 @@ client.on('message', async (message) => {
       if (stdout.length > 2000 || stderr.length > 2000) {
         await gist(`${stdout}\n\n${stderr}`)
           .then(res => {
-            message.channel.send({
-              embed: new Discord.MessageEmbed()
-                .setTitle('Console output exceeds 2000 characters. View Gist.')
-                .setURL(`${res.html_url}`)
-                .setColor(Math.floor(Math.random() * (0xFFFFFF + 1)))
-                .setDescription(`Console output exceeds 2000 characters. View Gist [here](${res.html_url}).`)
-                .setTimestamp()
-            }).catch((e) => message.channel.send(e.message))
+            const embed = new Discord.MessageEmbed()
+              .setTitle(`Console output exceeds 2000 characters. View Gist.`)
+              .setURL(`${res.html_url}`)
+              .setColor(Math.floor(Math.random() * (0xFFFFFF + 1)))
+              .setDescription(`Console output exceeds 2000 characters. View Gist [here](${res.html_url}).`)
+              .setTimestamp()
+            message.channel.send({embed}).catch((e) => message.channel.send(e.message))
           })
       } else {
         stdout && message.channel.send(`Info: \n\`\`\`${stdout}\`\`\``)
         stderr && message.channel.send(`Errors: \n\`\`\`${stderr}\`\`\``)
-        if (!stderr && !stdout) { message.react('\uD83E\uDD14') }
+        if (!stderr && !stdout) { message.react('\u2705') }
       }
     })
   }
