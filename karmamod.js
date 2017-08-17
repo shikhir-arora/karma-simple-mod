@@ -13,6 +13,7 @@ client.on('message', async (message) => {
   const check = rl.check(message)
   if (check === true) {
     if (message.cleanContent.startsWith(config.prefix)) {
+      if (message.channel.type === 'dm') return  
       const keyword = message.cleanContent.replace(config.prefix, '').trim() // Inputs ARE case sensitive; i.e. "test" and "Test" are different entries. To change to case-insensitive, replace .trim() to .trim().toLowerCase()
       const count = localStorage.getItem(keyword) || 0
       try {
@@ -31,6 +32,7 @@ client.on('message', async (message) => {
         console.log(e)
       }
     } else if ((message.cleanContent.endsWith('--')) || message.cleanContent.endsWith('++')) {
+      if (message.channel.type === 'dm') return
       if (!message.guild.roles.find('name', 'rep')) {
         return message.channel.send(`**Please create the rep role and assign it to use Karma!** This will only show if no rep role exists in the guild.`)
       }
@@ -67,7 +69,7 @@ client.on('message', async (message) => {
   }
 
   if (message.content.startsWith(`<@${client.user.id}>` + ` help`)) {
-    if (message.author.bot) return
+    if (message.channel.type === 'dm') return
     try {
       const embed = new Discord.RichEmbed()
         .setTitle(`KarmaBot-Mod Help & Information`)
