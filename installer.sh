@@ -47,7 +47,7 @@ echo "KarmaBot downloaded!"
 
 echo ""
 echo "Downloading KarmaBot dependencies.."
-cd $directory/$tempinstalldir/karma-simple-mod || failed "Could not enter the karma-simple folder - please check permissions!"
+cd $directory/$tempinstalldir/karma-simple-mod || failed "Could not enter the karma-simple-mod folder - please check permissions!"
 npm install 
 
 cd "$directory"
@@ -56,5 +56,5 @@ rm -r "$tempinstalldir"
 
 echo ""
 echo "Installation Complete. Please edit config.json.example and save as config.json"
-echo "To start the bot, use node karma.js or set up pm2/tmux to simplify things later - please see the readme!"
+echo "To start the bot, use node karmamod.js or set up pm2/tmux to simplify things later - please see the readme!"
 exit 0

@@ -64,7 +64,7 @@ client.on('message', (message) => {
 client.on('message', (message) => {
   if (message.content.startsWith(`<@!${client.user.id}>` + ` help`)) {
     message.reply({
-      embed: new Discord.RichEmbed()
+      embed: new Discord.MessageEmbed()
         .setTitle(`KarmaBot-Mod Help & Information`)
         .setURL(`https://github.com/shikhir-arora/karma-simple`)
         .setThumbnail(message.guild.iconURL)
@@ -105,7 +105,7 @@ client.on('message', async (message) => {
         await gist(clean(evaled))
           .then(res => {
             message.channel.send({
-              embed: new Discord.RichEmbed()
+              embed: new Discord.MessageEmbed()
                 .setTitle('Eval output exceeds 2000 characters. View Gist.')
                 .setURL(`${res.html_url}`)
                 .setColor(Math.floor(Math.random() * (0xFFFFFF + 1)))
@@ -139,7 +139,7 @@ client.on('message', async (message) => {
         await gist(`${stdout}\n\n${stderr}`)
           .then(res => {
             message.channel.send({
-              embed: new Discord.RichEmbed()
+              embed: new Discord.MessageEmbed()
                 .setTitle('Console output exceeds 2000 characters. View Gist.')
                 .setURL(`${res.html_url}`)
                 .setColor(Math.floor(Math.random() * (0xFFFFFF + 1)))

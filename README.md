@@ -1,8 +1,7 @@
 
 [![Discord](https://discordapp.com/api/guilds/249664293656592384/embed.png)](https://discord.io/joinec)
-[![Build Status](https://travis-ci.org/shikhir-arora/karma-simple.svg?branch=master)](https://travis-ci.org/shikhir-arora/karma-simple) 
-[![npm-build](http://img.shields.io/npm/v/karma-simple.svg)](https://npmjs.org/package/karma-simple)
-[![Dependencies](https://david-dm.org/shikhir-arora/karma-simple.svg)](https://rawgit.com/shikhir-arora/karma-simple/master/package.json)
+[![Build Status](https://travis-ci.org/shikhir-arora/karma-simple-mod.svg?branch=master)](https://travis-ci.org/shikhir-arora/karma-simple) 
+[![Dependencies](https://david-dm.org/shikhir-arora/karma-simple-mod.svg)](https://rawgit.com/shikhir-arora/karma-simple-mod/master/package.json)
 [![StandardJS](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com/)
 
 
@@ -21,8 +20,6 @@
 ## Support
 
 You can reach me `.vlexar#5320` (User ID: `243902693666455553`) pretty easily on my Discord server: https://discord.io/joinec or feel free to always open a GitHub issue: https://github.com/shikhir-arora/karma-simple/issues or pull-request a reason permits!
-
-- For users of the public KarmaBot - typing `@KarmaBot help` will bring up a quick and easy help menu with support/invite links and basic usage info.
 
 ---
 
