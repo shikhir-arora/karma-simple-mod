@@ -13,7 +13,7 @@ client.on('message', async (message) => {
   const check = rl.check(message)
   if (check === true) {
     if (message.cleanContent.startsWith(config.prefix)) {
-      if (message.channel.type === 'dm') return  
+      if (message.channel.type === 'dm') return
       const keyword = message.cleanContent.replace(config.prefix, '').trim() // Inputs ARE case sensitive; i.e. "test" and "Test" are different entries. To change to case-insensitive, replace .trim() to .trim().toLowerCase()
       const count = localStorage.getItem(keyword) || 0
       try {
