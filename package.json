@@ -27,7 +27,9 @@
   },
   "scripts": {
     "test": "eslint karmamod.js Ratelimiter.js",
-    "start": "node karmamod.js"
+    "start": "node karmamod.js",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "discord.js": "^11.2.1",
@@ -38,7 +40,8 @@
     "os-utils": "0.0.14",
     "snekgist": "^1.0.0",
     "superagent": "^3.8.2",
-    "util": "^0.10.3"
+    "util": "^0.10.3",
+    "snyk": "^1.189.0"
   },
   "peerDependencies": {
     "bufferutil": "^3.0.2",
@@ -51,5 +54,6 @@
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1"
-  }
+  },
+  "snyk": true
 }
